@@ -1,4 +1,6 @@
 *.swp
+.vscode
+MLX42/
 a.out
 anotacoes
 fractol
