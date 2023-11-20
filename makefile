@@ -6,7 +6,7 @@
 #    By: jvets <jvets@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 17:09:05 by jvets             #+#    #+#              #
-#    Updated: 2023/11/10 20:57:27 by jvets            ###   ########.fr        #
+#    Updated: 2023/11/17 23:15:01 by jvets            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,10 @@ LFLAGS	= -Lprintf -lftprintf -Llibft -lft
 all: libmlx $(NAME)
 
 libmlx:
-	@cmake $(LIBMLX) -B $(LIBMLX)/build 1> /dev/null && make -C $(LIBMLX)/build -j4 1> /dev/null
+	@cmake -DDEBUG=1 $(LIBMLX) -B $(LIBMLX)/build 1> /dev/null && make -C $(LIBMLX)/build -j4 1> /dev/null
 
 %.o:%.c
-	cc $(CFLAGS) -c $< -o $@ $(HEADERS)
+	cc $(CFLAGS) -c $< -o $@  $(HEADERS)
 
 $(NAME): $(OBJS)
 	cc $(FLAGS) -o $(NAME) $(OBJS) $(LFLAGS) $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm $(HEADERS)

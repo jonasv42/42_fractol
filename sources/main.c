@@ -6,23 +6,20 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/11/15 23:28:35 by jvets            ###   ########.fr       */
+/*   Updated: 2023/11/20 19:47:13 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../MLX42/include/MLX42/MLX42.h"
-#include "../printf/includes/ft_printf.h"
-#include "../libft/libft.h"
-#include <math.h>
+#include "../include/fractol.h"
+
 #define WIDTH 256
 #define HEIGHT 256
 #define BPP sizeof(int32_t)
 
-int	check_params(int argc, char *argv[], int *julia_1, int *julia_2);
+int			check_params(int argc, char *argv[], int *julia_1, int *julia_2);
 static void ft_error(void);
-void	esc(mlx_key_data_t keydata, void *param);
-void	draw(mlx_image_t *img);
-int	calculate_infinity(int x, int y, double rc, double ic);
+void		esc(mlx_key_data_t keydata, void *param);
+void		draw(mlx_image_t *img);
 
 int	main(int argc, char *argv[])
 {
@@ -43,7 +40,7 @@ int	main(int argc, char *argv[])
 	if (!mlx)
 		ft_printf("Error");
 
-	img = mlx_new_image(mlx, 800, 600);
+	img = mlx_new_image(mlx, 800, 800);
 	ft_memset(img->pixels, 255, img->width * img->height * BPP);
 	
 	mlx_image_to_window(mlx, img, 0, 0);
@@ -61,47 +58,75 @@ void	draw(mlx_image_t *img)
 {
 	double rc = -0.8;
 	double ic = 0.156;
+	// double rc = -0.5;
+	// double ic = 0.5;
+	// double rc = 0.3400000000000004;
+	// double ic = -0.08000000000000018;
+	// double rc = 0.54;
+	// double ic = -0.5;
 
-	int x;
-	int y;
+	double w;
+	double h;
+	t_inum	c_plane; //complex plane
 
-	y = 0;
-	while (y < 600)
+	h = 0;
+	while (h < 800)
 	{
-		x = 0;
-		while (x < 800)
+		w = 0;
+		while (w < 800)
 		{
-			calculate_infinity(x, y, rc, ic);
-			x++;
+			c_plane = pixel_to_complex(w, h);
+			if (calculate_infinity(c_plane, rc, ic) > 0)
+				mlx_put_pixel(img, w, h, 0xFCE205FF); // yellow, vá diminuindo o verde
+			else
+				mlx_put_pixel(img, w, h, 0x000000FF); // black
+			w++;
 		}
-		y++;
+		h++;
 	}
-	mlx_put_pixel(img, 100, 100, 0xFF0000);
-	mlx_put_pixel(img, 10, 10, 0xFF0000);
-	mlx_put_pixel(img, 0, 0, 0xFF0000);
 }
 
-int	calculate_infinity(int x, int y, double rc, double ic)
+//color_progression
+
+t_inum	pixel_to_complex(double w, double h)
+{
+	t_inum	result;
+	static int i = 0;
+
+	result.r = (4.0 / 800) * w - 2.0;
+	result.i = -1.0 * (4.0 / 800) * h + 2.0;
+	// if (i == 0)
+	// {
+	// 	printf("width %f, height %f\nwordt\nreal %f, imag. %f", w, h, result.r, result.i);
+	// 	i++;
+	// }
+	return (result);
+}
+
+int	calculate_infinity(t_inum c_plane, double rc, double ic)
 {
 	double	rz;
 	double	iz;
 	double	square;
 	double	magnitude;
-	double	i;
+	int		i; // i = iterations
+	double	rz_product;
+	double	iz_product;
 
-		rz = (x - 399);
-		iz = (y + 299);
+	i = 1;
 
-	while (i < 1000) // z = z * z + c
+	while (i < 100) // z = z * z + c
 	{
-		rz_product = (rz * rz) - (iz * iz);
-		iz_product = (rz * iz) + (iz * rz);
-		rz = rz_product + rc;
-		iz = iz_product + ic;
-		i++
-		magnitude = hypot(rz, iz);
-		if (magnitude > 100)
+		rz_product = (c_plane.r * c_plane.r) - (c_plane.i * c_plane.i);
+		iz_product = (c_plane.r * c_plane.i) + (c_plane.i * c_plane.r);
+		c_plane.r = rz_product + rc;
+		c_plane.i = iz_product + ic;
+		magnitude = hypot(c_plane.r, c_plane.i);
+		if (magnitude > 1.5)
 			return (i);
+		i++;
+		// if (i == 10)
+		// 	printf("magnitude %f", magnitude);
 	}
 	return (0);
 }
