@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/11/20 18:15:50 by jvets            ###   ########.fr       */
+/*   Updated: 2023/11/20 20:55:26 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_complex_number
 
 t_inum	pixel_to_complex(double w, double h);
 int	calculate_infinity(t_inum c_plane, double rc, double ic);
+uint32_t	color_progression(int iterations);
 
 #endif
 

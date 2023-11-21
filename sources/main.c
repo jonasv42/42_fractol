@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/11/20 19:47:13 by jvets            ###   ########.fr       */
+/*   Updated: 2023/11/20 21:18:46 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #define WIDTH 256
 #define HEIGHT 256
 #define BPP sizeof(int32_t)
+#define MAX_ITERATIONS 100
 
 int			check_params(int argc, char *argv[], int *julia_1, int *julia_2);
 static void ft_error(void);
@@ -69,6 +70,10 @@ void	draw(mlx_image_t *img)
 	double h;
 	t_inum	c_plane; //complex plane
 
+	int		iterations;
+
+	// yellow = 4242671103; // FCE205FF in hexa
+
 	h = 0;
 	while (h < 800)
 	{
@@ -76,8 +81,9 @@ void	draw(mlx_image_t *img)
 		while (w < 800)
 		{
 			c_plane = pixel_to_complex(w, h);
-			if (calculate_infinity(c_plane, rc, ic) > 0)
-				mlx_put_pixel(img, w, h, 0xFCE205FF); // yellow, vá diminuindo o verde
+			iterations = calculate_infinity(c_plane, rc, ic);
+			if (iterations > 0)
+				mlx_put_pixel(img, w, h, color_progression(iterations)); // yellow, vá diminuindo o verde
 			else
 				mlx_put_pixel(img, w, h, 0x000000FF); // black
 			w++;
@@ -86,7 +92,24 @@ void	draw(mlx_image_t *img)
 	}
 }
 
-//color_progression
+uint32_t	color_progression(int iterations)
+{
+	uint32_t	red;
+	uint32_t	green;
+	uint32_t	blue;
+	uint32_t	alpha;
+	uint32_t	hex_value;
+
+	red = 252;
+	green = 195 - (iterations * 1.9);
+	// green = 0 + (iterations * 2.5);
+	blue = 5;
+	alpha = 255;
+
+	hex_value = (red << 24) | (green << 16) | (blue << 8) | alpha;
+
+	return (hex_value);
+}
 
 t_inum	pixel_to_complex(double w, double h)
 {
@@ -115,7 +138,7 @@ int	calculate_infinity(t_inum c_plane, double rc, double ic)
 
 	i = 1;
 
-	while (i < 100) // z = z * z + c
+	while (i < MAX_ITERATIONS) // z = z * z + c
 	{
 		rz_product = (c_plane.r * c_plane.r) - (c_plane.i * c_plane.i);
 		iz_product = (c_plane.r * c_plane.i) + (c_plane.i * c_plane.r);
