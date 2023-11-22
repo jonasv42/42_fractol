@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/11/22 18:30:38 by jvets            ###   ########.fr       */
+/*   Updated: 2023/11/22 19:03:53 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 int			check_params(int argc, char *argv[], int *julia_1, int *julia_2);
 static void ft_error(void);
 void		esc(mlx_key_data_t keydata, void *param);
-void		draw(mlx_image_t *img);
 
 int	main(int argc, char *argv[])
 {
@@ -47,7 +46,7 @@ int	main(int argc, char *argv[])
 	mlx_image_to_window(mlx, img, 0, 0);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		ft_printf("Error");
-	draw(img);
+	draw_julia(img, julia_1, julia_2);
 
 	mlx_key_hook(mlx, &esc, &mlx);
 	mlx_loop(mlx);
@@ -55,10 +54,12 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
-void	draw(mlx_image_t *img)
+void	draw_julia(mlx_image_t *img, int julia_1, int julia_2)
 {
-	double rc = -0.8;
-	double ic = 0.156;
+	double rc = (double)julia_1;
+	double ic = (double)julia_2;
+	// double rc = -0.8;
+	// double ic = 0.156;
 	// double rc = -0.5;
 	// double ic = 0.5;
 	// double rc = 0.3400000000000004;
@@ -83,7 +84,7 @@ void	draw(mlx_image_t *img)
 			c_plane = pixel_to_complex(w, h);
 			iterations = calculate_infinity(c_plane, rc, ic);
 			if (iterations > 0)
-				mlx_put_pixel(img, w, h, color_progression(iterations)); // yellow, vá diminuindo o verde
+				mlx_put_pixel(img, w, h, color_progression(iterations));
 			else
 				mlx_put_pixel(img, w, h, 0x000000FF); // black
 			w++;
@@ -91,25 +92,6 @@ void	draw(mlx_image_t *img)
 		h++;
 	}
 }
-
-// uint32_t	color_progression(int iterations)
-// {
-// 	uint32_t	red;
-// 	uint32_t	green;
-// 	uint32_t	blue;
-// 	uint32_t	alpha;
-// 	uint32_t	hex_value;
-
-// 	red = 252;
-// 	green = 195 - (iterations * 1.95);
-// 	// green = 0 + (iterations * 2.5);
-// 	blue = 5;
-// 	alpha = 255;
-
-// 	hex_value = (red << 24) | (green << 16) | (blue << 8) | alpha;
-
-// 	return (hex_value);
-// }
 
 uint32_t	color_progression(int iterations)
 {
@@ -122,7 +104,7 @@ uint32_t	color_progression(int iterations)
 	alpha = 255;
 	if (iterations < (0.25 * MAX_ITERATIONS))
 	{
-		red = 230 - (iterations/(.25*MAX_ITERATIONS)) * 230; // 230/25=9.2
+		red = 230 - (iterations/(.25*MAX_ITERATIONS)) * 230;
 		green = 0;
 		blue = 230;
 	}
@@ -130,7 +112,6 @@ uint32_t	color_progression(int iterations)
 	{
 		red = 0;
 		green = 0 + (iterations/MAX_ITERATIONS)/(.25*MAX_ITERATIONS) * 230;
-		//green = 0 + (iterations/MAX_ITERATIONS*25) * 9.2;
 		blue = 230;
 	}
 	if (iterations >= (0.5 * MAX_ITERATIONS) && iterations < (0.75 * MAX_ITERATIONS))
@@ -145,7 +126,6 @@ uint32_t	color_progression(int iterations)
 		green = 230;
 		blue = 0;
 	}
-
 	hex_value = (red << 24) | (green << 16) | (blue << 8) | alpha;
 	return (hex_value);
 }
@@ -214,4 +194,37 @@ int	check_params(int argc, char *argv[], int *julia_1, int *julia_2)
 			return (1);
 	}
 	return (0);
+}
+
+double	atof(const char *nptr)
+{
+	double	sign;
+	double	result;
+
+	if (*nptr == ' ' || (*nptr > 8 && *nptr < 14))
+		nptr++;
+	else if (*nptr == '-' || *nptr == '+')
+	{
+		if (nptr[1] < '0' || nptr[1] > '9')
+			return (0);
+		if (*nptr == '-')
+			sign = -1.0;
+		nptr++;
+	}
+	else
+	{
+		convert_numbers(nptr, &result);
+		//tratar . -> pular o ponto, gravar quantos caráteres tem após isso e dividir por 10^1, 10^2, 10^3, etc.
+		return (result * sign);
+	}
+	return (result);	
+}
+
+static void	convert_numbers(const char *nptr, double *result)
+{
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		*result = (*result * 10) + (*nptr - '0');
+		nptr++;
+	}
 }
