@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/11/20 21:18:46 by jvets            ###   ########.fr       */
+/*   Updated: 2023/11/22 18:30:38 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,25 @@ void	draw(mlx_image_t *img)
 	}
 }
 
+// uint32_t	color_progression(int iterations)
+// {
+// 	uint32_t	red;
+// 	uint32_t	green;
+// 	uint32_t	blue;
+// 	uint32_t	alpha;
+// 	uint32_t	hex_value;
+
+// 	red = 252;
+// 	green = 195 - (iterations * 1.95);
+// 	// green = 0 + (iterations * 2.5);
+// 	blue = 5;
+// 	alpha = 255;
+
+// 	hex_value = (red << 24) | (green << 16) | (blue << 8) | alpha;
+
+// 	return (hex_value);
+// }
+
 uint32_t	color_progression(int iterations)
 {
 	uint32_t	red;
@@ -100,14 +119,34 @@ uint32_t	color_progression(int iterations)
 	uint32_t	alpha;
 	uint32_t	hex_value;
 
-	red = 252;
-	green = 195 - (iterations * 1.9);
-	// green = 0 + (iterations * 2.5);
-	blue = 5;
 	alpha = 255;
+	if (iterations < (0.25 * MAX_ITERATIONS))
+	{
+		red = 230 - (iterations/(.25*MAX_ITERATIONS)) * 230; // 230/25=9.2
+		green = 0;
+		blue = 230;
+	}
+	if (iterations >= (0.25 * MAX_ITERATIONS) && iterations < (0.5 * MAX_ITERATIONS))
+	{
+		red = 0;
+		green = 0 + (iterations/MAX_ITERATIONS)/(.25*MAX_ITERATIONS) * 230;
+		//green = 0 + (iterations/MAX_ITERATIONS*25) * 9.2;
+		blue = 230;
+	}
+	if (iterations >= (0.5 * MAX_ITERATIONS) && iterations < (0.75 * MAX_ITERATIONS))
+	{
+		red = 0;
+		green = 230;
+		blue = 230 - (iterations/MAX_ITERATIONS)/(.25*MAX_ITERATIONS) * 230;
+	}
+	if (iterations >= (0.75 * MAX_ITERATIONS))
+	{
+		red = 0 + (iterations/MAX_ITERATIONS)/(.25*MAX_ITERATIONS) * 230;
+		green = 230;
+		blue = 0;
+	}
 
 	hex_value = (red << 24) | (green << 16) | (blue << 8) | alpha;
-
 	return (hex_value);
 }
 
