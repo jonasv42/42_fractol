@@ -38,7 +38,9 @@ typedef struct s_complex_number
 t_inum	pixel_to_complex(double w, double h);
 int	calculate_infinity(t_inum c_plane, double rc, double ic);
 uint32_t	color_progression(int iterations);
-void	draw_julia(mlx_image_t *img, int julia_1, int julia_2);
+void	draw_julia(mlx_image_t *img, double julia_1, double julia_2);
+static void	convert_numbers(const char *nptr, double *result);
+double	ft_atof(const char *nptr);
 
 #endif
 

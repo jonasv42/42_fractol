@@ -17,19 +17,17 @@
 #define BPP sizeof(int32_t)
 #define MAX_ITERATIONS 100
 
-int			check_params(int argc, char *argv[], int *julia_1, int *julia_2);
+int			check_params(int argc, char *argv[], double *julia_1, double *julia_2);
 static void ft_error(void);
 void		esc(mlx_key_data_t keydata, void *param);
 
 int	main(int argc, char *argv[])
 {
-	int	julia_1;
-	int	julia_2;
+	double	julia_1;
+	double	julia_2;
 	mlx_t	*mlx;
 	mlx_image_t	*img;
 
-	julia_1 = 0;
-	julia_2 = 0;
 	if (!check_params(argc, argv, &julia_1, &julia_2))
 	{
 		ft_printf("Enter 'Julia' and two numbers between -1 and 1 or enter 'Mandelbrot'");
@@ -54,7 +52,7 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
-void	draw_julia(mlx_image_t *img, int julia_1, int julia_2)
+void	draw_julia(mlx_image_t *img, double julia_1, double julia_2)
 {
 	double rc = (double)julia_1;
 	double ic = (double)julia_2;
@@ -182,21 +180,22 @@ void	esc(mlx_key_data_t keydata, void *mlx)
 	}
 }
 
-int	check_params(int argc, char *argv[], int *julia_1, int *julia_2)
+int	check_params(int argc, char *argv[], double *julia_1, double *julia_2)
 {
 	if (argc > 1 && ft_strncmp(argv[1], "Mandelbrot", 11) == 0 && argc < 3)
 		return (1);
 	if (argc == 4 && ft_strncmp(argv[1], "Julia", 6) == 0)
 	{
-		*julia_1 = ft_atoi(argv[2]);
-		*julia_2 = ft_atoi(argv[3]);
+		*julia_1 = ft_atof((const char *)argv[2]);
+		*julia_2 = ft_atof((const char *)argv[3]);
+		printf("julia 1 %f julia 2 %f", *julia_1, *julia_2);
 		if (*julia_1 > -1 && *julia_1 < 1 && *julia_2 > -1 && *julia_2 < 1)
 			return (1);
 	}
 	return (0);
 }
 
-double	atof(const char *nptr)
+double	ft_atof(const char *nptr)
 {
 	double	sign;
 	double	result;
@@ -214,7 +213,6 @@ double	atof(const char *nptr)
 	else
 	{
 		convert_numbers(nptr, &result);
-		//tratar . -> pular o ponto, gravar quantos caráteres tem após isso e dividir por 10^1, 10^2, 10^3, etc.
 		return (result * sign);
 	}
 	return (result);	
@@ -222,9 +220,21 @@ double	atof(const char *nptr)
 
 static void	convert_numbers(const char *nptr, double *result)
 {
-	while (*nptr >= '0' && *nptr <= '9')
+	int	dot;
+
+	dot = -1;
+	while ((*nptr >= '0' && *nptr <= '9') || *nptr == '.')
 	{
+		if (*nptr == '.')
+		{
+			dot++;
+			nptr++;
+		}
 		*result = (*result * 10) + (*nptr - '0');
 		nptr++;
+		if (dot > -1)
+			dot++;
 	}
+	if (dot > -1)
+		*result = *result / pow(10, dot);
 }

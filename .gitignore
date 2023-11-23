@@ -1,4 +1,5 @@
 *.swp
+test.c
 .vscode
 MLX42/
 a.out
