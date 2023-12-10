@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/11/22 19:03:53 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/10 19:17:11 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,19 +201,27 @@ double	ft_atof(const char *nptr)
 	double	sign;
 	double	result;
 
-	if (*nptr == ' ' || (*nptr > 8 && *nptr < 14))
-		nptr++;
-	else if (*nptr == '-' || *nptr == '+')
+	sign = 1;
+	result = 0;
+	while (*nptr)
 	{
-		if (nptr[1] < '0' || nptr[1] > '9')
-			return (0);
-		if (*nptr == '-')
-			sign = -1.0;
-		nptr++;
+		if (*nptr == ' ' || (*nptr > 8 && *nptr < 14))
+			nptr++;
+		else if (*nptr == '-' || *nptr == '+')
+		{
+			if (nptr[1] < '0' || nptr[1] > '9')
+				return (0);
+			if (*nptr == '-')
+				sign = -1.0;
+			nptr++;
+		}
+		else
+		{
+			convert_numbers(nptr, &result);
+			return (result * sign);	
+		}
 	}
-	else
-		convert_numbers(nptr, &result);
-	return (result * sign);		
+	return (0);
 }
 
 static void	convert_numbers(const char *nptr, double *result)
