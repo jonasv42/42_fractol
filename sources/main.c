@@ -33,6 +33,7 @@ int	main(int argc, char *argv[])
 		ft_printf("Enter 'Julia' and two numbers between -1 and 1 or enter 'Mandelbrot'");
 		return (0);
 	}
+	printf("julia 1 %f, julia 2 %f", julia_1, julia_2);
 	mlx_set_setting(MLX_MAXIMIZED, true);
 	mlx = mlx_init(WIDTH, HEIGHT, "fractal", true);
 	if (!mlx)
@@ -211,11 +212,8 @@ double	ft_atof(const char *nptr)
 		nptr++;
 	}
 	else
-	{
 		convert_numbers(nptr, &result);
-		return (result * sign);
-	}
-	return (result);	
+	return (result * sign);		
 }
 
 static void	convert_numbers(const char *nptr, double *result)
@@ -226,14 +224,12 @@ static void	convert_numbers(const char *nptr, double *result)
 	while ((*nptr >= '0' && *nptr <= '9') || *nptr == '.')
 	{
 		if (*nptr == '.')
-		{
 			dot++;
-			nptr++;
-		}
-		*result = (*result * 10) + (*nptr - '0');
+        else
+		    *result = (*result * 10) + (*nptr - '0');
+		if ((dot > -1 && *nptr != '.'))
+			dot++;
 		nptr++;
-		if (dot > -1)
-			dot++;
 	}
 	if (dot > -1)
 		*result = *result / pow(10, dot);
