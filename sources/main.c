@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/10 19:17:11 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/10 20:58:05 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,21 @@
 #define BPP sizeof(int32_t)
 #define MAX_ITERATIONS 100
 
-int			check_params(int argc, char *argv[], double *julia_1, double *julia_2);
+int	check_params(int argc, char *argv[], t_specs *specs);
 static void ft_error(void);
 void		esc(mlx_key_data_t keydata, void *param);
 
 int	main(int argc, char *argv[])
 {
-	double	julia_1;
-	double	julia_2;
+	t_specs	specs;
 	mlx_t	*mlx;
 	mlx_image_t	*img;
 
-	if (!check_params(argc, argv, &julia_1, &julia_2))
+	if (!check_params(argc, argv, &specs))
 	{
 		ft_printf("Enter 'Julia' and two numbers between -1 and 1 or enter 'Mandelbrot'");
 		return (0);
 	}
-	printf("julia 1 %f, julia 2 %f", julia_1, julia_2);
 	mlx_set_setting(MLX_MAXIMIZED, true);
 	mlx = mlx_init(WIDTH, HEIGHT, "fractal", true);
 	if (!mlx)
@@ -45,7 +43,10 @@ int	main(int argc, char *argv[])
 	mlx_image_to_window(mlx, img, 0, 0);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		ft_printf("Error");
-	draw_julia(img, julia_1, julia_2);
+	if (ft_strncmp(specs.fractol, "Julia", 6) == 0)
+		draw_julia(img, &specs);
+	if (ft_strncmp(specs.fractol, "Mandelbrot", 11) == 0)
+		draw_mandelbrot(img, &specs);
 
 	mlx_key_hook(mlx, &esc, &mlx);
 	mlx_loop(mlx);
@@ -53,10 +54,10 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
-void	draw_julia(mlx_image_t *img, double julia_1, double julia_2)
+void	draw_julia(mlx_image_t *img, t_specs *specs)
 {
-	double rc = (double)julia_1;
-	double ic = (double)julia_2;
+	double rc = (double)specs->julia_1;
+	double ic = (double)specs->julia_2;
 	// double rc = -0.8;
 	// double ic = 0.156;
 	// double rc = -0.5;
@@ -82,6 +83,32 @@ void	draw_julia(mlx_image_t *img, double julia_1, double julia_2)
 		{
 			c_plane = pixel_to_complex(w, h);
 			iterations = calculate_infinity(c_plane, rc, ic);
+			if (iterations > 0)
+				mlx_put_pixel(img, w, h, color_progression(iterations));
+			else
+				mlx_put_pixel(img, w, h, 0x000000FF); // black
+			w++;
+		}
+		h++;
+	}
+}
+
+void	draw_mandelbrot(mlx_image_t *img, t_specs *specs)
+{
+	double w;
+	double h;
+	t_inum	c_plane; //complex plane
+
+	int		iterations;
+
+	h = 0;
+	while (h < 800)
+	{
+		w = 0;
+		while (w < 800)
+		{
+			c_plane = pixel_to_complex(w, h);
+			iterations = calc_infinity_mandelbrot(c_plane);
 			if (iterations > 0)
 				mlx_put_pixel(img, w, h, color_progression(iterations));
 			else
@@ -136,11 +163,6 @@ t_inum	pixel_to_complex(double w, double h)
 
 	result.r = (4.0 / 800) * w - 2.0;
 	result.i = -1.0 * (4.0 / 800) * h + 2.0;
-	// if (i == 0)
-	// {
-	// 	printf("width %f, height %f\nwordt\nreal %f, imag. %f", w, h, result.r, result.i);
-	// 	i++;
-	// }
 	return (result);
 }
 
@@ -166,8 +188,35 @@ int	calculate_infinity(t_inum c_plane, double rc, double ic)
 		if (magnitude > 1.5)
 			return (i);
 		i++;
-		// if (i == 10)
-		// 	printf("magnitude %f", magnitude);
+	}
+	return (0);
+}
+
+int	calc_infinity_mandelbrot(t_inum c_plane)
+{
+	double	rz;
+	double	iz;
+	double	square;
+	double	magnitude;
+	int		i; // i = iterations
+	double	rz_product;
+	double	iz_product;
+
+	i = 1;
+	rz = 0.0;
+	iz = 0.0;
+
+	while (i < MAX_ITERATIONS) // z = z * z + c
+	{
+		rz_product = (rz * rz) - (iz * iz);
+		iz_product = (rz * iz) + (iz * rz);
+		rz = rz_product + c_plane.r;
+		iz = iz_product + c_plane.i;
+
+		magnitude = hypot(rz, iz);
+		if (magnitude > 1.5)
+			return (i);
+		i++;
 	}
 	return (0);
 }
@@ -181,16 +230,19 @@ void	esc(mlx_key_data_t keydata, void *mlx)
 	}
 }
 
-int	check_params(int argc, char *argv[], double *julia_1, double *julia_2)
+int	check_params(int argc, char *argv[], t_specs *specs)
 {
 	if (argc > 1 && ft_strncmp(argv[1], "Mandelbrot", 11) == 0 && argc < 3)
+	{
+		specs->fractol = argv[1];
 		return (1);
+	}
 	if (argc == 4 && ft_strncmp(argv[1], "Julia", 6) == 0)
 	{
-		*julia_1 = ft_atof((const char *)argv[2]);
-		*julia_2 = ft_atof((const char *)argv[3]);
-		printf("julia 1 %f julia 2 %f", *julia_1, *julia_2);
-		if (*julia_1 > -1 && *julia_1 < 1 && *julia_2 > -1 && *julia_2 < 1)
+		specs->fractol = argv[1];
+		specs->julia_1 = ft_atof((const char *)argv[2]);
+		specs->julia_2 = ft_atof((const char *)argv[3]);
+		if (specs->julia_1 > -1 && specs->julia_1 < 1 && specs->julia_2 > -1 && specs->julia_2 < 1)
 			return (1);
 	}
 	return (0);
