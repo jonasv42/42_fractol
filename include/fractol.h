@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/10 20:24:15 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/11 22:55:04 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,15 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 #include "../libft/libft.h"
 #include "../MLX42/include/MLX42/MLX42.h"
 #include "../printf/includes/ft_printf.h"
+
+#define WIDTH 800
+#define HEIGHT 800
+#define BPP sizeof(int32_t)
+#define MAX_ITERATIONS 300
 
 // typedef struct mlx
 // {

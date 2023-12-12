@@ -6,16 +6,11 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/10 20:58:05 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/11 22:57:01 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
-
-#define WIDTH 256
-#define HEIGHT 256
-#define BPP sizeof(int32_t)
-#define MAX_ITERATIONS 100
 
 int	check_params(int argc, char *argv[], t_specs *specs);
 static void ft_error(void);
@@ -30,17 +25,16 @@ int	main(int argc, char *argv[])
 	if (!check_params(argc, argv, &specs))
 	{
 		ft_printf("Enter 'Julia' and two numbers between -1 and 1 or enter 'Mandelbrot'");
-		return (0);
+		return (EXIT_FAILURE);
 	}
-	mlx_set_setting(MLX_MAXIMIZED, true);
-	mlx = mlx_init(WIDTH, HEIGHT, "fractal", true);
+	mlx = mlx_init(WIDTH, HEIGHT, specs.fractol, true); //connect to x server
 	if (!mlx)
-		ft_printf("Error");
+		return (EXIT_FAILURE);
 
-	img = mlx_new_image(mlx, 800, 800);
-	ft_memset(img->pixels, 255, img->width * img->height * BPP);
+	img = mlx_new_image(mlx, WIDTH, HEIGHT);
+	if (!img)
+		return (EXIT_FAILURE);
 	
-	mlx_image_to_window(mlx, img, 0, 0);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		ft_printf("Error");
 	if (ft_strncmp(specs.fractol, "Julia", 6) == 0)
@@ -48,7 +42,8 @@ int	main(int argc, char *argv[])
 	if (ft_strncmp(specs.fractol, "Mandelbrot", 11) == 0)
 		draw_mandelbrot(img, &specs);
 
-	mlx_key_hook(mlx, &esc, &mlx);
+	mlx_key_hook(mlx, &esc, mlx);
+	//mlx_scroll_hook(mlx, ft_scroll, &specs);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 	return (0);
@@ -225,7 +220,7 @@ void	esc(mlx_key_data_t keydata, void *mlx)
 {
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
-		mlx_close_window((mlx_t *)mlx);
+		mlx_close_window(mlx);
 		//exit (0);
 	}
 }
@@ -242,7 +237,7 @@ int	check_params(int argc, char *argv[], t_specs *specs)
 		specs->fractol = argv[1];
 		specs->julia_1 = ft_atof((const char *)argv[2]);
 		specs->julia_2 = ft_atof((const char *)argv[3]);
-		if (specs->julia_1 > -1 && specs->julia_1 < 1 && specs->julia_2 > -1 && specs->julia_2 < 1)
+		if (specs->julia_1 >= -1 && specs->julia_1 <= 1 && specs->julia_2 >= -1 && specs->julia_2 <= 1)
 			return (1);
 	}
 	return (0);
