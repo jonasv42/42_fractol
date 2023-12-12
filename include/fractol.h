@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/11 22:55:04 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 18:41:11 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ typedef struct s_specifications
 	double	julia_2;
 }	t_specs;
 
-t_inum	pixel_to_complex(double w, double h);
-int	calculate_infinity(t_inum c_plane, double rc, double ic);
+t_inum		pixel_to_complex(double w, double h);
+int			calculate_infinity(t_inum c_plane, double rc, double ic);
 uint32_t	color_progression(int iterations);
-void	draw_julia(mlx_image_t *img, t_specs *specs);
+void		draw_julia(mlx_image_t *img, t_specs *specs);
 static void	convert_numbers(const char *nptr, double *result);
-double	ft_atof(const char *nptr);
-int	calc_infinity_mandelbrot(t_inum c_plane);
-void	draw_mandelbrot(mlx_image_t *img, t_specs *specs);
+double		ft_atof(const char *nptr);
+int			calc_infinity_mandelbrot(t_inum c_plane);
+void		draw_mandelbrot(mlx_image_t *img, t_specs *specs);
 
 #endif
 
