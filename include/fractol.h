@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 18:41:11 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 19:08:13 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,22 @@ typedef struct s_complex_number
 typedef struct s_specifications
 {
 	char	*fractol;
-	double	julia_1;
-	double	julia_2;
+	double	julia_rc;
+	double	julia_ic;
 }	t_specs;
 
+typedef struct s_calc
+{
+	double	rz;
+	double	iz;
+	double	magnitude;
+	int		i; // i = iterations
+	double	rz_product;
+	double	iz_product;
+}	t_calc;
+
 t_inum		pixel_to_complex(double w, double h);
-int			calculate_infinity(t_inum c_plane, double rc, double ic);
+int	calculate_infinity(t_inum c_plane, t_specs **specs);
 uint32_t	color_progression(int iterations);
 void		draw_julia(mlx_image_t *img, t_specs *specs);
 static void	convert_numbers(const char *nptr, double *result);

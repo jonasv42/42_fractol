@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 18:43:35 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 18:52:37 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	main(int argc, char *argv[])
 
 void	draw_julia(mlx_image_t *img, t_specs *specs)
 {
-	double rc = (double)specs->julia_1;
-	double ic = (double)specs->julia_2;
+	// double rc = (double)specs->julia_1;
+	// double ic = (double)specs->julia_2;
 	double w;
 	double h;
 	t_inum	c_plane; //complex plane
@@ -66,7 +66,7 @@ void	draw_julia(mlx_image_t *img, t_specs *specs)
 		while (w < 800)
 		{
 			c_plane = pixel_to_complex(w, h);
-			iterations = calculate_infinity(c_plane, rc, ic);
+			iterations = calculate_infinity(c_plane, &specs);
 			if (iterations > 0)
 				mlx_put_pixel(img, w, h, color_progression(iterations));
 			else
@@ -160,9 +160,9 @@ int	check_params(int argc, char *argv[], t_specs *specs)
 	if (argc == 4 && ft_strncmp(argv[1], "Julia", 6) == 0)
 	{
 		specs->fractol = argv[1];
-		specs->julia_1 = ft_atof((const char *)argv[2]);
-		specs->julia_2 = ft_atof((const char *)argv[3]);
-		if (specs->julia_1 >= -1 && specs->julia_1 <= 1 && specs->julia_2 >= -1 && specs->julia_2 <= 1)
+		specs->julia_rc = ft_atof((const char *)argv[2]);
+		specs->julia_ic = ft_atof((const char *)argv[3]);
+		if (specs->julia_rc >= -1 && specs->julia_rc <= 1 && specs->julia_ic >= -1 && specs->julia_ic <= 1)
 			return (1);
 	}
 	return (0);

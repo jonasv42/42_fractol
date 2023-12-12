@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 18:31:10 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 18:38:04 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 19:10:28 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,54 +23,42 @@ t_inum	pixel_to_complex(double w, double h)
 	return (result);
 }
 
-int	calculate_infinity(t_inum c_plane, double rc, double ic)
+int	calculate_infinity(t_inum c_plane, t_specs **specs)
 {
-	double	rz;
-	double	iz;
-	double	square;
-	double	magnitude;
-	int		i; // i = iterations
-	double	rz_product;
-	double	iz_product;
+	t_calc	calc;
 
-	i = 1;
-	while (i < MAX_ITERATIONS) // z = z * z + c
+	calc.i = 1;
+	while (calc.i < MAX_ITERATIONS) // z = z * z + c
 	{
-		rz_product = (c_plane.r * c_plane.r) - (c_plane.i * c_plane.i);
-		iz_product = (c_plane.r * c_plane.i) + (c_plane.i * c_plane.r);
-		c_plane.r = rz_product + rc;
-		c_plane.i = iz_product + ic;
-		magnitude = hypot(c_plane.r, c_plane.i);
-		if (magnitude > 1.5)
-			return (i);
-		i++;
+		calc.rz_product = (c_plane.r * c_plane.r) - (c_plane.i * c_plane.i);
+		calc.iz_product = (c_plane.r * c_plane.i) + (c_plane.i * c_plane.r);
+		c_plane.r = calc.rz_product + (*specs)->julia_rc;
+		c_plane.i = calc.iz_product + (*specs)->julia_ic;
+		calc.magnitude = hypot(c_plane.r, c_plane.i);
+		if (calc.magnitude > 1.5)
+			return (calc.i);
+		calc.i++;
 	}
 	return (0);
 }
 
 int	calc_infinity_mandelbrot(t_inum c_plane)
 {
-	double	rz;
-	double	iz;
-	double	square;
-	double	magnitude;
-	int		i; // i = iterations
-	double	rz_product;
-	double	iz_product;
+	t_calc	calc;
 
-	i = 1;
-	rz = 0.0;
-	iz = 0.0;
-	while (i < MAX_ITERATIONS) // z = z * z + c
+	calc.i = 1;
+	calc.rz = 0.0;
+	calc.iz = 0.0;
+	while (calc.i < MAX_ITERATIONS) // z = z * z + c
 	{
-		rz_product = (rz * rz) - (iz * iz);
-		iz_product = (rz * iz) + (iz * rz);
-		rz = rz_product + c_plane.r;
-		iz = iz_product + c_plane.i;
-		magnitude = hypot(rz, iz);
-		if (magnitude > 1.5)
-			return (i);
-		i++;
+		calc.rz_product = (calc.rz * calc.rz) - (calc.iz * calc.iz);
+		calc.iz_product = (calc.rz * calc.iz) + (calc.iz * calc.rz);
+		calc.rz = calc.rz_product + c_plane.r;
+		calc.iz = calc.iz_product + c_plane.i;
+		calc.magnitude = hypot(calc.rz, calc.iz);
+		if (calc.magnitude > 1.5)
+			return (calc.i);
+		calc.i++;
 	}
 	return (0);
 }
