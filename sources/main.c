@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 23:20:45 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 19:03:56 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 int	main(int argc, char *argv[])
 {
 	t_specs	specs;
+
+	specs.w_offset = 2;
+	specs.h_offset = 2;
 
 	if (!check_params(argc, argv, &specs))
 		return (EXIT_FAILURE);
@@ -26,8 +29,10 @@ int	main(int argc, char *argv[])
 	specs.img = mlx_new_image(specs.mlx, WIDTH, HEIGHT);
 	if (!specs.img)
 		return (EXIT_FAILURE);
+
+	mlx_loop_hook(specs.mlx, &select_draw, &specs);
 	
-	specs.draw(&specs);
+	//specs.draw(&specs);
 		
 	if (!specs.img || (mlx_image_to_window(specs.mlx, specs.img, 0, 0) < 0))
 		ft_printf("Error");
@@ -39,55 +44,6 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
-void	draw_julia(t_specs *specs)
-{
-	double		w;
-	double		h;
-	t_complex	c_plane; //complex plane
-	int			iterations;
-
-	h = 0;
-	while (h < 800)
-	{
-		w = 0;
-		while (w < 800)
-		{
-			c_plane = pixel_to_complex(w, h);
-			iterations = calculate_infinity(c_plane, &specs);
-			if (iterations > 0)
-				mlx_put_pixel(specs->img, w, h, color_progression(iterations));
-			else
-				mlx_put_pixel(specs->img, w, h, 0x000000FF); // black
-			w++;
-		}
-		h++;
-	}
-}
-
-void	draw_mandelbrot(t_specs *specs)
-{
-	double		w;
-	double		h;
-	t_complex	c_plane; //complex plane
-	int			iterations;
-
-	h = 0;
-	while (h < 800)
-	{
-		w = 0;
-		while (w < 800)
-		{
-			c_plane = pixel_to_complex(w, h);
-			iterations = calc_infinity_mandelbrot(c_plane);
-			if (iterations > 0)
-				mlx_put_pixel(specs->img, w, h, color_progression(iterations));
-			else
-				mlx_put_pixel(specs->img, w, h, 0x000000FF); // black
-			w++;
-		}
-		h++;
-	}
-}
 
 uint32_t	color_progression(int iterations)
 {

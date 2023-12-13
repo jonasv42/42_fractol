@@ -6,20 +6,18 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 18:31:10 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 19:43:11 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 18:33:13 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-t_complex	pixel_to_complex(double w, double h)
+t_complex	pixel_to_complex(double w, double h, t_specs **specs)
 {
 	t_complex		result;
-	static int	i;
 
-	i = 0;
-	result.r = (4.0 / 800) * w - 2.0;
-	result.i = -1.0 * (4.0 / 800) * h + 2.0;
+	result.r = (4.0 / 800) * w - (*specs)->w_offset;
+	result.i = -1.0 * (4.0 / 800) * h + (*specs)->h_offset;
 	return (result);
 }
 

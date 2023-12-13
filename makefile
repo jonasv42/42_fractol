@@ -6,14 +6,14 @@
 #    By: jvets <jvets@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 17:09:05 by jvets             #+#    #+#              #
-#    Updated: 2023/12/12 21:18:45 by jvets            ###   ########.fr        #
+#    Updated: 2023/12/12 23:24:10 by jvets            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	fractol
 LIBMLX	=	./MLX42
 HEADERS	=	-I $(LIBMLX)/include
-FILES	=	main.c math_utils.c events.c
+FILES	=	main.c math_utils.c events.c draw.c
 SRCS	=	$(addprefix sources/, $(FILES))
 OBJS	=	$(SRCS:.c=.o)
 FLAGS	=	-Wall -Wextra -Werror -g3
