@@ -6,15 +6,15 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 18:31:10 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 19:10:28 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 19:43:11 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-t_inum	pixel_to_complex(double w, double h)
+t_complex	pixel_to_complex(double w, double h)
 {
-	t_inum		result;
+	t_complex		result;
 	static int	i;
 
 	i = 0;
@@ -23,7 +23,7 @@ t_inum	pixel_to_complex(double w, double h)
 	return (result);
 }
 
-int	calculate_infinity(t_inum c_plane, t_specs **specs)
+int	calculate_infinity(t_complex c_plane, t_specs **specs)
 {
 	t_calc	calc;
 
@@ -35,14 +35,14 @@ int	calculate_infinity(t_inum c_plane, t_specs **specs)
 		c_plane.r = calc.rz_product + (*specs)->julia_rc;
 		c_plane.i = calc.iz_product + (*specs)->julia_ic;
 		calc.magnitude = hypot(c_plane.r, c_plane.i);
-		if (calc.magnitude > 1.5)
+		if (calc.magnitude > 2)
 			return (calc.i);
 		calc.i++;
 	}
 	return (0);
 }
 
-int	calc_infinity_mandelbrot(t_inum c_plane)
+int	calc_infinity_mandelbrot(t_complex c_plane)
 {
 	t_calc	calc;
 

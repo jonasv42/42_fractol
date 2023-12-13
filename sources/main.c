@@ -6,58 +6,49 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 18:52:37 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 21:38:09 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-int	check_params(int argc, char *argv[], t_specs *specs);
-static void ft_error(void);
-void		esc(mlx_key_data_t keydata, void *param);
-
 int	main(int argc, char *argv[])
 {
 	t_specs	specs;
-	mlx_t	*mlx;
 	mlx_image_t	*img;
 
 	if (!check_params(argc, argv, &specs))
-	{
-		ft_printf("Enter 'Julia' and two numbers between -1 and 1 or enter 'Mandelbrot'");
 		return (EXIT_FAILURE);
-	}
-	mlx = mlx_init(WIDTH, HEIGHT, specs.fractol, true); //connect to x server
-	if (!mlx)
+		
+	specs.mlx = mlx_init(WIDTH, HEIGHT, specs.fractol, true); //connect to x server
+	if (!specs.mlx)
 		return (EXIT_FAILURE);
 
-	img = mlx_new_image(mlx, WIDTH, HEIGHT);
+	img = mlx_new_image(specs.mlx, WIDTH, HEIGHT);
 	if (!img)
 		return (EXIT_FAILURE);
 	
-	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
-		ft_printf("Error");
 	if (ft_strncmp(specs.fractol, "Julia", 6) == 0)
 		draw_julia(img, &specs);
-	if (ft_strncmp(specs.fractol, "Mandelbrot", 11) == 0)
+	else
 		draw_mandelbrot(img, &specs);
+		
+	if (!img || (mlx_image_to_window(specs.mlx, img, 0, 0) < 0))
+		ft_printf("Error");
 
-	mlx_key_hook(mlx, &esc, mlx);
+	mlx_key_hook(specs.mlx, &esc, specs.mlx);
 	//mlx_scroll_hook(mlx, ft_scroll, &specs);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
+	mlx_loop(specs.mlx);
+	mlx_terminate(specs.mlx);
 	return (0);
 }
 
 void	draw_julia(mlx_image_t *img, t_specs *specs)
 {
-	// double rc = (double)specs->julia_1;
-	// double ic = (double)specs->julia_2;
-	double w;
-	double h;
-	t_inum	c_plane; //complex plane
-
-	int		iterations;
+	double		w;
+	double		h;
+	t_complex	c_plane; //complex plane
+	int			iterations;
 
 	h = 0;
 	while (h < 800)
@@ -79,11 +70,10 @@ void	draw_julia(mlx_image_t *img, t_specs *specs)
 
 void	draw_mandelbrot(mlx_image_t *img, t_specs *specs)
 {
-	double w;
-	double h;
-	t_inum	c_plane; //complex plane
-
-	int		iterations;
+	double		w;
+	double		h;
+	t_complex	c_plane; //complex plane
+	int			iterations;
 
 	h = 0;
 	while (h < 800)
@@ -114,40 +104,30 @@ uint32_t	color_progression(int iterations)
 	alpha = 255;
 	if (iterations < (0.25 * MAX_ITERATIONS))
 	{
-		red = 230 - (iterations/(.25*MAX_ITERATIONS)) * 230;
+		red = 230 - (iterations / (.25 * MAX_ITERATIONS)) * 230;
 		green = 0;
 		blue = 230;
 	}
 	if (iterations >= (0.25 * MAX_ITERATIONS) && iterations < (0.5 * MAX_ITERATIONS))
 	{
 		red = 0;
-		green = 0 + (iterations/MAX_ITERATIONS)/(.25*MAX_ITERATIONS) * 230;
+		green = 0 + (iterations / MAX_ITERATIONS) / (.25 * MAX_ITERATIONS) * 230;
 		blue = 230;
 	}
 	if (iterations >= (0.5 * MAX_ITERATIONS) && iterations < (0.75 * MAX_ITERATIONS))
 	{
 		red = 0;
 		green = 230;
-		blue = 230 - (iterations/MAX_ITERATIONS)/(.25*MAX_ITERATIONS) * 230;
+		blue = 230 - (iterations / MAX_ITERATIONS) / (.25 * MAX_ITERATIONS) * 230;
 	}
 	if (iterations >= (0.75 * MAX_ITERATIONS))
 	{
-		red = 0 + (iterations/MAX_ITERATIONS)/(.25*MAX_ITERATIONS) * 230;
+		red = 0 + (iterations / MAX_ITERATIONS) / (.25 * MAX_ITERATIONS) * 230;
 		green = 230;
 		blue = 0;
 	}
 	hex_value = (red << 24) | (green << 16) | (blue << 8) | alpha;
 	return (hex_value);
-}
-
-
-void	esc(mlx_key_data_t keydata, void *mlx)
-{
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-	{
-		mlx_close_window(mlx);
-		//exit (0);
-	}
 }
 
 int	check_params(int argc, char *argv[], t_specs *specs)
@@ -162,8 +142,10 @@ int	check_params(int argc, char *argv[], t_specs *specs)
 		specs->fractol = argv[1];
 		specs->julia_rc = ft_atof((const char *)argv[2]);
 		specs->julia_ic = ft_atof((const char *)argv[3]);
-		if (specs->julia_rc >= -1 && specs->julia_rc <= 1 && specs->julia_ic >= -1 && specs->julia_ic <= 1)
+		if (specs->julia_rc >= -1 && specs->julia_rc <= 1
+			&& specs->julia_ic >= -1 && specs->julia_ic <= 1)
 			return (1);
 	}
+	ft_printf("Enter 'Julia' and two numbers between -1 and 1 or enter 'Mandelbrot'");
 	return (0);
 }

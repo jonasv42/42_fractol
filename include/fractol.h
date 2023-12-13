@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 19:08:13 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 21:31:24 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,18 @@
 #define BPP sizeof(int32_t)
 #define MAX_ITERATIONS 300
 
-// typedef struct mlx
-// {
-// 	void	*window;
-// 	void	*context;
-// 	int32_t	width;
-// 	int32_t	height;
-// 	double	delta_time;
-// }	mlx_t;
-
 typedef struct s_complex_number
 {
 	double	r;
 	double	i;
-}	t_inum;
+}	t_complex;
 
 typedef struct s_specifications
 {
 	char	*fractol;
 	double	julia_rc;
 	double	julia_ic;
+	mlx_t	*mlx;
 }	t_specs;
 
 typedef struct s_calc
@@ -58,14 +50,17 @@ typedef struct s_calc
 	double	iz_product;
 }	t_calc;
 
-t_inum		pixel_to_complex(double w, double h);
-int	calculate_infinity(t_inum c_plane, t_specs **specs);
+t_complex		pixel_to_complex(double w, double h);
+int			calculate_infinity(t_complex c_plane, t_specs **specs);
 uint32_t	color_progression(int iterations);
 void		draw_julia(mlx_image_t *img, t_specs *specs);
 static void	convert_numbers(const char *nptr, double *result);
 double		ft_atof(const char *nptr);
-int			calc_infinity_mandelbrot(t_inum c_plane);
+int			calc_infinity_mandelbrot(t_complex c_plane);
 void		draw_mandelbrot(mlx_image_t *img, t_specs *specs);
+int			check_params(int argc, char *argv[], t_specs *specs);
+static void ft_error(void);
+void		esc(mlx_key_data_t keydata, void *param);
 
 #endif
 
