@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:51:00 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 19:15:33 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 19:41:37 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	esc(mlx_key_data_t keydata, void *param)
 		specs->w_offset = (specs->w_offset) + 0.1;
 	if (keydata.key == MLX_KEY_RIGHT && keydata.action == MLX_PRESS)
 		specs->w_offset = (specs->w_offset) - 0.1;
-	// if (keydata.key == MLX_KEY_UP && keydata.action == MLX_PRESS)
-	// 	specs->w_offset = (specs->h_offset) * 1.05;
-	// if (keydata.key == MLX_KEY_DOWN && keydata.action == MLX_PRESS)
-	// 	specs->w_offset = (specs->h_offset) * 0.95;
+	if (keydata.key == MLX_KEY_UP && keydata.action == MLX_PRESS)
+		specs->h_offset = (specs->h_offset) + 0.1;
+	if (keydata.key == MLX_KEY_DOWN && keydata.action == MLX_PRESS)
+		specs->h_offset = (specs->h_offset) - 0.1;
 }
