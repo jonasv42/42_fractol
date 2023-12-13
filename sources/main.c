@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 21:38:09 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 23:20:45 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	main(int argc, char *argv[])
 {
 	t_specs	specs;
-	mlx_image_t	*img;
 
 	if (!check_params(argc, argv, &specs))
 		return (EXIT_FAILURE);
@@ -24,26 +23,23 @@ int	main(int argc, char *argv[])
 	if (!specs.mlx)
 		return (EXIT_FAILURE);
 
-	img = mlx_new_image(specs.mlx, WIDTH, HEIGHT);
-	if (!img)
+	specs.img = mlx_new_image(specs.mlx, WIDTH, HEIGHT);
+	if (!specs.img)
 		return (EXIT_FAILURE);
 	
-	if (ft_strncmp(specs.fractol, "Julia", 6) == 0)
-		draw_julia(img, &specs);
-	else
-		draw_mandelbrot(img, &specs);
+	specs.draw(&specs);
 		
-	if (!img || (mlx_image_to_window(specs.mlx, img, 0, 0) < 0))
+	if (!specs.img || (mlx_image_to_window(specs.mlx, specs.img, 0, 0) < 0))
 		ft_printf("Error");
 
-	mlx_key_hook(specs.mlx, &esc, specs.mlx);
+	mlx_key_hook(specs.mlx, &esc, &specs);
 	//mlx_scroll_hook(mlx, ft_scroll, &specs);
 	mlx_loop(specs.mlx);
 	mlx_terminate(specs.mlx);
 	return (0);
 }
 
-void	draw_julia(mlx_image_t *img, t_specs *specs)
+void	draw_julia(t_specs *specs)
 {
 	double		w;
 	double		h;
@@ -59,16 +55,16 @@ void	draw_julia(mlx_image_t *img, t_specs *specs)
 			c_plane = pixel_to_complex(w, h);
 			iterations = calculate_infinity(c_plane, &specs);
 			if (iterations > 0)
-				mlx_put_pixel(img, w, h, color_progression(iterations));
+				mlx_put_pixel(specs->img, w, h, color_progression(iterations));
 			else
-				mlx_put_pixel(img, w, h, 0x000000FF); // black
+				mlx_put_pixel(specs->img, w, h, 0x000000FF); // black
 			w++;
 		}
 		h++;
 	}
 }
 
-void	draw_mandelbrot(mlx_image_t *img, t_specs *specs)
+void	draw_mandelbrot(t_specs *specs)
 {
 	double		w;
 	double		h;
@@ -84,9 +80,9 @@ void	draw_mandelbrot(mlx_image_t *img, t_specs *specs)
 			c_plane = pixel_to_complex(w, h);
 			iterations = calc_infinity_mandelbrot(c_plane);
 			if (iterations > 0)
-				mlx_put_pixel(img, w, h, color_progression(iterations));
+				mlx_put_pixel(specs->img, w, h, color_progression(iterations));
 			else
-				mlx_put_pixel(img, w, h, 0x000000FF); // black
+				mlx_put_pixel(specs->img, w, h, 0x000000FF); // black
 			w++;
 		}
 		h++;
@@ -135,6 +131,7 @@ int	check_params(int argc, char *argv[], t_specs *specs)
 	if (argc > 1 && ft_strncmp(argv[1], "Mandelbrot", 11) == 0 && argc < 3)
 	{
 		specs->fractol = argv[1];
+		specs->draw = draw_mandelbrot;
 		return (1);
 	}
 	if (argc == 4 && ft_strncmp(argv[1], "Julia", 6) == 0)
@@ -144,7 +141,10 @@ int	check_params(int argc, char *argv[], t_specs *specs)
 		specs->julia_ic = ft_atof((const char *)argv[3]);
 		if (specs->julia_rc >= -1 && specs->julia_rc <= 1
 			&& specs->julia_ic >= -1 && specs->julia_ic <= 1)
+		{
+			specs->draw = draw_julia;
 			return (1);
+		}
 	}
 	ft_printf("Enter 'Julia' and two numbers between -1 and 1 or enter 'Mandelbrot'");
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/12 21:31:24 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/12 23:19:42 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,12 @@ typedef struct s_complex_number
 
 typedef struct s_specifications
 {
-	char	*fractol;
-	double	julia_rc;
-	double	julia_ic;
-	mlx_t	*mlx;
+	char		*fractol;
+	double		julia_rc;
+	double		julia_ic;
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+	void		(*draw)(struct s_specifications *specs);
 }	t_specs;
 
 typedef struct s_calc
@@ -50,14 +52,14 @@ typedef struct s_calc
 	double	iz_product;
 }	t_calc;
 
-t_complex		pixel_to_complex(double w, double h);
+t_complex	pixel_to_complex(double w, double h);
 int			calculate_infinity(t_complex c_plane, t_specs **specs);
 uint32_t	color_progression(int iterations);
-void		draw_julia(mlx_image_t *img, t_specs *specs);
+void		draw_julia(t_specs *specs);
 static void	convert_numbers(const char *nptr, double *result);
 double		ft_atof(const char *nptr);
 int			calc_infinity_mandelbrot(t_complex c_plane);
-void		draw_mandelbrot(mlx_image_t *img, t_specs *specs);
+void		draw_mandelbrot(t_specs *specs);
 int			check_params(int argc, char *argv[], t_specs *specs);
 static void ft_error(void);
 void		esc(mlx_key_data_t keydata, void *param);
