@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 22:44:43 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/14 17:56:41 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ typedef struct s_specifications
 	double		h_offset;
 	double		scale;
 	int			max_iterations;
+	double		x0;
+	double		x800;
+	double		y0;
+	double		x800;
 }	t_specs;
 
 typedef struct s_calc
