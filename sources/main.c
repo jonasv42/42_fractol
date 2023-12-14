@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 19:03:56 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 21:27:17 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	main(int argc, char *argv[])
 
 	specs.w_offset = 2;
 	specs.h_offset = 2;
+	specs.scale = 4;
+	specs.max_iterations = 25;
 
 	if (!check_params(argc, argv, &specs))
 		return (EXIT_FAILURE);
@@ -31,8 +33,6 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 
 	mlx_loop_hook(specs.mlx, &select_draw, &specs);
-	
-	//specs.draw(&specs);
 		
 	if (!specs.img || (mlx_image_to_window(specs.mlx, specs.img, 0, 0) < 0))
 		ft_printf("Error");

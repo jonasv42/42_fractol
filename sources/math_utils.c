@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 18:31:10 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 18:33:13 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 21:21:22 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ t_complex	pixel_to_complex(double w, double h, t_specs **specs)
 {
 	t_complex		result;
 
-	result.r = (4.0 / 800) * w - (*specs)->w_offset;
-	result.i = -1.0 * (4.0 / 800) * h + (*specs)->h_offset;
+	result.r = ((*specs)->scale / WIDTH) * w - (*specs)->w_offset;
+	result.i = -1.0 * ((*specs)->scale / HEIGHT) * h + (*specs)->h_offset;
 	return (result);
 }
 
@@ -26,7 +26,7 @@ int	calculate_infinity(t_complex c_plane, t_specs **specs)
 	t_calc	calc;
 
 	calc.i = 1;
-	while (calc.i < MAX_ITERATIONS) // z = z * z + c
+	while (calc.i < (*specs)->max_iterations) // z = z * z + c
 	{
 		calc.rz_product = (c_plane.r * c_plane.r) - (c_plane.i * c_plane.i);
 		calc.iz_product = (c_plane.r * c_plane.i) + (c_plane.i * c_plane.r);
@@ -40,14 +40,14 @@ int	calculate_infinity(t_complex c_plane, t_specs **specs)
 	return (0);
 }
 
-int	calc_infinity_mandelbrot(t_complex c_plane)
+int	calc_infinity_mandelbrot(t_complex c_plane, t_specs **specs)
 {
 	t_calc	calc;
 
 	calc.i = 1;
 	calc.rz = 0.0;
 	calc.iz = 0.0;
-	while (calc.i < MAX_ITERATIONS) // z = z * z + c
+	while (calc.i < (*specs)->max_iterations) // z = z * z + c
 	{
 		calc.rz_product = (calc.rz * calc.rz) - (calc.iz * calc.iz);
 		calc.iz_product = (calc.rz * calc.iz) + (calc.iz * calc.rz);

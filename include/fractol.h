@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 19:06:37 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 21:21:42 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #define WIDTH 800
 #define HEIGHT 800
 #define BPP sizeof(int32_t)
-#define MAX_ITERATIONS 300
+#define MAX_ITERATIONS 100
 
 typedef struct s_complex_number
 {
@@ -42,6 +42,8 @@ typedef struct s_specifications
 	void		(*draw)(struct s_specifications *specs);
 	double		w_offset; //b in my pixel to complex plain formula
 	double		h_offset;
+	double		scale;
+	int			max_iterations;
 }	t_specs;
 
 typedef struct s_calc
@@ -60,7 +62,7 @@ uint32_t	color_progression(int iterations);
 void		draw_julia(t_specs *specs);
 static void	convert_numbers(const char *nptr, double *result);
 double		ft_atof(const char *nptr);
-int			calc_infinity_mandelbrot(t_complex c_plane);
+int	calc_infinity_mandelbrot(t_complex c_plane, t_specs **specs);
 void		draw_mandelbrot(t_specs *specs);
 int			check_params(int argc, char *argv[], t_specs *specs);
 static void ft_error(void);

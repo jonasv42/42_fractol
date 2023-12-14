@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:51:00 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 19:41:37 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 21:39:07 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,21 @@ void	esc(mlx_key_data_t keydata, void *param)
 		//exit (0);
 	}
 	if (keydata.key == MLX_KEY_LEFT && keydata.action == MLX_PRESS)
-		specs->w_offset = (specs->w_offset) + 0.1;
+		specs->w_offset = (specs->w_offset) * 1.1;
 	if (keydata.key == MLX_KEY_RIGHT && keydata.action == MLX_PRESS)
-		specs->w_offset = (specs->w_offset) - 0.1;
+		specs->w_offset = (specs->w_offset) * 0.9;
 	if (keydata.key == MLX_KEY_UP && keydata.action == MLX_PRESS)
-		specs->h_offset = (specs->h_offset) + 0.1;
+		specs->h_offset = (specs->h_offset) * 1.1;
 	if (keydata.key == MLX_KEY_DOWN && keydata.action == MLX_PRESS)
-		specs->h_offset = (specs->h_offset) - 0.1;
+		specs->h_offset = (specs->h_offset) * 0.9;
+	if (keydata.key == MLX_KEY_I && keydata.action == MLX_PRESS)
+	{
+		specs->scale = (specs->scale) * 0.9;
+		specs->max_iterations = (specs->max_iterations) + 25;
+	}
+	if (keydata.key == MLX_KEY_O && keydata.action == MLX_PRESS)
+	{
+		specs->scale = (specs->scale) * 1.1;
+		specs->max_iterations = (specs->max_iterations) - 25;
+	}
 }

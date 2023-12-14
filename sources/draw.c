@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 23:23:42 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 19:07:19 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 21:21:00 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	draw_mandelbrot(t_specs *specs)
 		while (w < 800)
 		{
 			c_plane = pixel_to_complex(w, h, &specs);
-			iterations = calc_infinity_mandelbrot(c_plane);
+			iterations = calc_infinity_mandelbrot(c_plane, &specs);
 			if (iterations > 0)
 				mlx_put_pixel(specs->img, w, h, color_progression(iterations));
 			else
