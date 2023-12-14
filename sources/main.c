@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 21:27:17 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 22:47:59 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int argc, char *argv[])
 }
 
 
-uint32_t	color_progression(int iterations)
+uint32_t	color_progression(int iterations, t_specs **specs)
 {
 	uint32_t	red;
 	uint32_t	green;
@@ -54,27 +54,27 @@ uint32_t	color_progression(int iterations)
 	uint32_t	hex_value;
 
 	alpha = 255;
-	if (iterations < (0.25 * MAX_ITERATIONS))
+	if (iterations < (0.25 * (*specs)->max_iterations))
 	{
-		red = 230 - (iterations / (.25 * MAX_ITERATIONS)) * 230;
+		red = 230 - (iterations / (.25 * (*specs)->max_iterations)) * 230;
 		green = 0;
 		blue = 230;
 	}
-	if (iterations >= (0.25 * MAX_ITERATIONS) && iterations < (0.5 * MAX_ITERATIONS))
+	if (iterations >= (0.25 * (*specs)->max_iterations) && iterations < (0.5 * (*specs)->max_iterations))
 	{
 		red = 0;
-		green = 0 + (iterations / MAX_ITERATIONS) / (.25 * MAX_ITERATIONS) * 230;
+		green = 0 + (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
 		blue = 230;
 	}
-	if (iterations >= (0.5 * MAX_ITERATIONS) && iterations < (0.75 * MAX_ITERATIONS))
+	if (iterations >= (0.5 * (*specs)->max_iterations) && iterations < (0.75 * (*specs)->max_iterations))
 	{
 		red = 0;
 		green = 230;
-		blue = 230 - (iterations / MAX_ITERATIONS) / (.25 * MAX_ITERATIONS) * 230;
+		blue = 230 - (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
 	}
-	if (iterations >= (0.75 * MAX_ITERATIONS))
+	if (iterations >= (0.75 * (*specs)->max_iterations))
 	{
-		red = 0 + (iterations / MAX_ITERATIONS) / (.25 * MAX_ITERATIONS) * 230;
+		red = 0 + (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
 		green = 230;
 		blue = 0;
 	}

@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 21:21:42 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/13 22:44:43 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct s_calc
 
 t_complex	pixel_to_complex(double w, double h, t_specs **specs);
 int			calculate_infinity(t_complex c_plane, t_specs **specs);
-uint32_t	color_progression(int iterations);
+uint32_t	color_progression(int iterations, t_specs **specs);
 void		draw_julia(t_specs *specs);
 static void	convert_numbers(const char *nptr, double *result);
 double		ft_atof(const char *nptr);
