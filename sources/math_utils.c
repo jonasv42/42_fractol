@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 18:31:10 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/13 21:21:22 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/14 21:29:03 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ t_complex	pixel_to_complex(double w, double h, t_specs **specs)
 {
 	t_complex		result;
 
-	result.r = ((*specs)->scale / WIDTH) * w - (*specs)->w_offset;
-	result.i = -1.0 * ((*specs)->scale / HEIGHT) * h + (*specs)->h_offset;
+	result.r = ((*specs)->scale_x / WIDTH) * w + (*specs)->x0;
+	result.i = ((*specs)->scale_y / HEIGHT) * h + (*specs)->y0;
 	return (result);
 }
 

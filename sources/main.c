@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/14 17:58:27 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/14 21:16:27 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@ int	main(int argc, char *argv[])
 {
 	t_specs	specs;
 
-	specs.w_offset = 2;
-	specs.h_offset = 2;
-	specs.scale = 4;
+	specs.scale_x = 4;
+	specs.scale_y = -4;
 	specs.max_iterations = 25;
 	specs.x0 = -2;
 	specs.x800 = 2;
 	specs.y0 = 2;
-	specs.y800 = -2
+	specs.y800 = -2;
 
 	if (!check_params(argc, argv, &specs))
 		return (EXIT_FAILURE);

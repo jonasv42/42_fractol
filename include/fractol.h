@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/14 17:56:41 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/14 21:37:06 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,13 @@ typedef struct s_specifications
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 	void		(*draw)(struct s_specifications *specs);
-	double		w_offset; //b in my pixel to complex plain formula
-	double		h_offset;
-	double		scale;
+	double		scale_y;
+	double		scale_x;
 	int			max_iterations;
 	double		x0;
 	double		x800;
 	double		y0;
-	double		x800;
+	double		y800;
 }	t_specs;
 
 typedef struct s_calc
@@ -72,6 +71,8 @@ int			check_params(int argc, char *argv[], t_specs *specs);
 static void ft_error(void);
 void		esc(mlx_key_data_t keydata, void *param);
 void		select_draw(void *param);
+void	ft_zoom(double zoomfactor, t_specs *specs);
+void	ft_shift_img(int x, int y, int sign, t_specs *specs);
 
 #endif
 

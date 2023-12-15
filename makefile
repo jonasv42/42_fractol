@@ -6,7 +6,7 @@
 #    By: jvets <jvets@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 17:09:05 by jvets             #+#    #+#              #
-#    Updated: 2023/12/12 23:24:10 by jvets            ###   ########.fr        #
+#    Updated: 2023/12/14 22:09:29 by jvets            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,20 +31,20 @@ $(NAME): $(OBJS)
 	cc $(FLAGS) -o $(NAME) $(OBJS) $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm $(LFLAGS) $(HEADERS)
 
 libft:
-	make -C ./libft --no-print-directory
+	@make -C ./libft --no-print-directory
 
 printf:
-	make -C ./printf --no-print-directory
+	@make -C ./printf --no-print-directory
 
 clean:
-	make clean -C ./libft
-	make clean -C ./printf
+#	make clean -C ./libft
+#	make clean -C ./printf
 	rm -f $(OBJS)
-	rm -rf $(LIBMLX)/build
+#	rm -rf $(LIBMLX)/build
 
 fclean: clean
-	make fclean -C ./libft
-	make fclean -C ./printf
+#	make fclean -C ./libft
+#	make fclean -C ./printf
 	rm -f $(NAME)
 
 re: fclean all
