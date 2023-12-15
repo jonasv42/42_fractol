@@ -6,7 +6,7 @@
 #    By: jvets <jvets@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 17:09:05 by jvets             #+#    #+#              #
-#    Updated: 2023/12/14 22:09:29 by jvets            ###   ########.fr        #
+#    Updated: 2023/12/15 20:41:34 by jvets            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,9 @@ fclean: clean
 #	make fclean -C ./printf
 	rm -f $(NAME)
 
+bonus:
+
+
 re: fclean all
 
-.PHONY: all clean fclean re libmlx printf libft
+.PHONY: all clean fclean re libmlx printf libft bonus
