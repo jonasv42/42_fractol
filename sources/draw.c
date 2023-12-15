@@ -22,10 +22,10 @@ void	select_draw(void *param)
 
 void	draw_julia(t_specs *specs)
 {
+	int			iterations;
 	double		w;
 	double		h;
 	t_complex	c_plane; //complex plane
-	int			iterations;
 
 	h = 0;
 	while (h < 800)
@@ -36,7 +36,7 @@ void	draw_julia(t_specs *specs)
 			c_plane = pixel_to_complex(w, h, &specs);
 			iterations = calculate_infinity(c_plane, &specs);
 			if (iterations > 0)
-				mlx_put_pixel(specs->img, w, h, color_progression(iterations, &specs));
+				mlx_put_pixel(specs->img, w, h, ft_color(iterations, &specs));
 			else
 				mlx_put_pixel(specs->img, w, h, 0x000000FF); // black
 			w++;
@@ -47,10 +47,10 @@ void	draw_julia(t_specs *specs)
 
 void	draw_mandelbrot(t_specs *specs)
 {
+	int			iterations;
 	double		w;
 	double		h;
 	t_complex	c_plane; //complex plane
-	int			iterations;
 
 	h = 0;
 	while (h < 800)
@@ -61,7 +61,7 @@ void	draw_mandelbrot(t_specs *specs)
 			c_plane = pixel_to_complex(w, h, &specs);
 			iterations = calc_infinity_mandelbrot(c_plane, &specs);
 			if (iterations > 0)
-				mlx_put_pixel(specs->img, w, h, color_progression(iterations, &specs));
+				mlx_put_pixel(specs->img, w, h, ft_color(iterations, &specs));
 			else
 				mlx_put_pixel(specs->img, w, h, 0x000000FF); // black
 			w++;

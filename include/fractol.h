@@ -61,7 +61,7 @@ typedef struct s_calc
 
 t_complex	pixel_to_complex(double w, double h, t_specs **specs);
 int			calculate_infinity(t_complex c_plane, t_specs **specs);
-uint32_t	color_progression(int iterations, t_specs **specs);
+uint32_t	ft_color(int iterations, t_specs **specs);
 void		draw_julia(t_specs *specs);
 static void	convert_numbers(const char *nptr, double *result);
 double		ft_atof(const char *nptr);
@@ -74,7 +74,7 @@ void		select_draw(void *param);
 void	ft_zoom(double zoomfactor, t_specs *specs);
 void	ft_shift_img(int x, int y, int sign, t_specs *specs);
 void	ft_scroll(double xdelta, double ydelta, void *param);
-void	ft_mouse_zoom(double sign, int32_t width, int32_t height, t_specs *specs);
+void	ft_init(char *argv[], t_specs *specs);
 
 #endif
 

@@ -70,7 +70,7 @@ void	ft_zoom(double sign, t_specs *specs)
 	specs->x800 -= aux;
 	specs->y0 -= aux;
 	specs->y800 += aux;
-	specs->scale_x = ((specs->x800) + (-1 * (specs->x0))); // / 800 either here or in pixel_to_complex
+	specs->scale_x = ((specs->x800) + (-1 * (specs->x0)));
 	specs->scale_y = ((specs->y800) + (-1 * (specs->y0)));
 	if (sign > 0 || specs->max_iterations > 25) // prevent too low a quality
 		specs->max_iterations += sign;
@@ -78,50 +78,13 @@ void	ft_zoom(double sign, t_specs *specs)
 
 void	ft_scroll(double xdelta, double ydelta, void *param)
 {
-	t_specs *specs;
+	t_specs	*specs;
 	int32_t	width;
 	int32_t	height;
 
 	specs = param;
-
 	if (ydelta < 0) // zoom in
-	{
-		mlx_get_mouse_pos(specs->mlx, &width, &height);
-		ft_mouse_zoom(1, width, height, specs);
-		//printf("%d ", width);
-	}
+		ft_zoom(1, specs);
 	if (ydelta > 0)
 		ft_zoom (-1, specs);
-}
-
-void	ft_mouse_zoom(double sign, int32_t x, int32_t y, t_specs *specs)
-{
-	double	aux;
-	int32_t x_shift_direction;
-	double	x_shift_amount;
-
-	x_shift_direction = x - (WIDTH / 2); // if neg. shift left
-	x_shift_amount = (fabs((double)x_shift_direction) / WIDTH) * (fabs(specs->x0 - specs->x800)); //calc % shift and apply to cplane
-	printf("%f ", x_shift_amount);
-
-	if (x_shift_direction < 0)
-	{
-		specs->x0 -= x_shift_amount;
-		specs->x800 -= x_shift_amount;
-	}
-	if (x_shift_direction > 0)
-	{
-		specs->x0 += x_shift_amount;
-		specs->x800 += x_shift_amount;
-	}
-
-	aux = 0.05 * fabs(specs->x0 - specs->x800) * sign; // calculate distance x0 & x800
-	specs->x0 += aux;
-	specs->x800 -= aux;
-	specs->y0 -= aux;
-	specs->y800 += aux;
-	specs->scale_x = ((specs->x800) + (-1 * (specs->x0))); // / 800 either here or in pixel_to_complex
-	specs->scale_y = ((specs->y800) + (-1 * (specs->y0)));
-	if (sign > 0 || specs->max_iterations > 25) // prevent too low a quality
-		specs->max_iterations += sign;
 }

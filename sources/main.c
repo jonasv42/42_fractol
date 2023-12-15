@@ -16,30 +16,18 @@ int	main(int argc, char *argv[])
 {
 	t_specs	specs;
 
-	specs.scale_x = 4;
-	specs.scale_y = -4;
-	specs.max_iterations = 25;
-	specs.x0 = -2;
-	specs.x800 = 2;
-	specs.y0 = 2;
-	specs.y800 = -2;
-
 	if (!check_params(argc, argv, &specs))
 		return (EXIT_FAILURE);
-		
-	specs.mlx = mlx_init(WIDTH, HEIGHT, specs.fractol, true); //connect to x server
+	ft_init(argv, &specs);
+	specs.mlx = mlx_init(WIDTH, HEIGHT, specs.fractol, true);
 	if (!specs.mlx)
 		return (EXIT_FAILURE);
-
 	specs.img = mlx_new_image(specs.mlx, WIDTH, HEIGHT);
 	if (!specs.img)
 		return (EXIT_FAILURE);
-
 	mlx_loop_hook(specs.mlx, &select_draw, &specs);
-		
 	if (!specs.img || (mlx_image_to_window(specs.mlx, specs.img, 0, 0) < 0))
 		ft_printf("Error");
-
 	mlx_key_hook(specs.mlx, &esc, &specs);
 	mlx_scroll_hook(specs.mlx, &ft_scroll, &specs);
 	mlx_loop(specs.mlx);
@@ -47,8 +35,19 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
+void	ft_init(char *argv[], t_specs *specs)
+{
+	(*specs).fractol = argv[1];
+	(*specs).scale_x = 4;
+	(*specs).scale_y = -4;
+	(*specs).max_iterations = 25;
+	(*specs).x0 = -2;
+	(*specs).x800 = 2;
+	(*specs).y0 = 2;
+	(*specs).y800 = -2;
+}
 
-uint32_t	color_progression(int iterations, t_specs **specs)
+uint32_t	ft_color(int iterations, t_specs **specs)
 {
 	uint32_t	red;
 	uint32_t	green;
@@ -89,13 +88,11 @@ int	check_params(int argc, char *argv[], t_specs *specs)
 {
 	if (argc > 1 && ft_strncmp(argv[1], "Mandelbrot", 11) == 0 && argc < 3)
 	{
-		specs->fractol = argv[1];
 		specs->draw = draw_mandelbrot;
 		return (1);
 	}
 	if (argc == 4 && ft_strncmp(argv[1], "Julia", 6) == 0)
 	{
-		specs->fractol = argv[1];
 		specs->julia_rc = ft_atof((const char *)argv[2]);
 		specs->julia_ic = ft_atof((const char *)argv[3]);
 		if (specs->julia_rc >= -1 && specs->julia_rc <= 1
@@ -105,6 +102,7 @@ int	check_params(int argc, char *argv[], t_specs *specs)
 			return (1);
 		}
 	}
-	ft_printf("Enter 'Julia' and two numbers between -1 and 1 or enter 'Mandelbrot'");
+	ft_printf("Enter 'Julia' and two numbers between -1 and 1\n");
+	ft_printf("or enter 'Mandelbrot'\n");
 	return (0);
 }
