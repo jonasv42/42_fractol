@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/14 21:37:06 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/14 22:58:05 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void		esc(mlx_key_data_t keydata, void *param);
 void		select_draw(void *param);
 void	ft_zoom(double zoomfactor, t_specs *specs);
 void	ft_shift_img(int x, int y, int sign, t_specs *specs);
+void	ft_scroll(double xdelta, double ydelta, void *param);
+void	ft_mouse_zoom(double sign, int32_t width, int32_t height, t_specs *specs);
 
 #endif
 

@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/14 21:16:27 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/14 22:30:02 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int argc, char *argv[])
 		ft_printf("Error");
 
 	mlx_key_hook(specs.mlx, &esc, &specs);
-	//mlx_scroll_hook(mlx, ft_scroll, &specs);
+	mlx_scroll_hook(specs.mlx, &ft_scroll, &specs);
 	mlx_loop(specs.mlx);
 	mlx_terminate(specs.mlx);
 	return (0);
