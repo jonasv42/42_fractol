@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:27:28 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/14 22:30:02 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/15 19:21:45 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,39 +49,32 @@ void	ft_init(char *argv[], t_specs *specs)
 
 uint32_t	ft_color(int iterations, t_specs **specs)
 {
-	uint32_t	red;
-	uint32_t	green;
-	uint32_t	blue;
-	uint32_t	alpha;
-	uint32_t	hex_value;
-
-	alpha = 255;
 	if (iterations < (0.25 * (*specs)->max_iterations))
 	{
-		red = 230 - (iterations / (.25 * (*specs)->max_iterations)) * 230;
-		green = 0;
-		blue = 230;
+		(*specs)->red = 230 - (iterations / (.25 * (*specs)->max_iterations)) * 230;
+		(*specs)->green = 0;
+		(*specs)->blue = 230;
 	}
 	if (iterations >= (0.25 * (*specs)->max_iterations) && iterations < (0.5 * (*specs)->max_iterations))
 	{
-		red = 0;
-		green = 0 + (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
-		blue = 230;
+		(*specs)->red = 0;
+		(*specs)->green = 0 + (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
+		(*specs)->blue = 230;
 	}
 	if (iterations >= (0.5 * (*specs)->max_iterations) && iterations < (0.75 * (*specs)->max_iterations))
 	{
-		red = 0;
-		green = 230;
-		blue = 230 - (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
+		(*specs)->red = 0;
+		(*specs)->green = 230;
+		(*specs)->blue = 230 - (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
 	}
 	if (iterations >= (0.75 * (*specs)->max_iterations))
 	{
-		red = 0 + (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
-		green = 230;
-		blue = 0;
+		(*specs)->red = 0 + (iterations / (*specs)->max_iterations) / (.25 * (*specs)->max_iterations) * 230;
+		(*specs)->green = 230;
+		(*specs)->blue = 0;
 	}
-	hex_value = (red << 24) | (green << 16) | (blue << 8) | alpha;
-	return (hex_value);
+	(*specs)->hex_value = ((*specs)->red << 24) | ((*specs)->green << 16) | ((*specs)->blue << 8) | 255;
+	return ((*specs)->hex_value);
 }
 
 int	check_params(int argc, char *argv[], t_specs *specs)
@@ -91,18 +84,32 @@ int	check_params(int argc, char *argv[], t_specs *specs)
 		specs->draw = draw_mandelbrot;
 		return (1);
 	}
-	if (argc == 4 && ft_strncmp(argv[1], "Julia", 6) == 0)
+	if (argc == 4 && ft_strncmp(argv[1], "Julia", 6) == 0 && ft_isnum(argv[2]) && ft_isnum(argv[3]))
 	{
 		specs->julia_rc = ft_atof((const char *)argv[2]);
 		specs->julia_ic = ft_atof((const char *)argv[3]);
-		if (specs->julia_rc >= -1 && specs->julia_rc <= 1
-			&& specs->julia_ic >= -1 && specs->julia_ic <= 1)
+		if (specs->julia_rc >= -2 && specs->julia_rc <= 2
+			&& specs->julia_ic >= -2 && specs->julia_ic <= 2)
 		{
 			specs->draw = draw_julia;
 			return (1);
 		}
 	}
-	ft_printf("Enter 'Julia' and two numbers between -1 and 1\n");
+	ft_printf("Enter 'Julia' and two numbers between -2 and 2\n");
 	ft_printf("or enter 'Mandelbrot'\n");
 	return (0);
+}
+
+int	ft_isnum(const char *str)
+{
+	if ((*str) == '-')
+		str++;
+	while (*str)
+	{
+		if ((!ft_isdigit(*str) && (*str) != '.') || 
+		((*str) == '.' && !(ft_isdigit(*(str + 1)))))
+			return (0);
+		str++;
+	}
+	return (1);
 }

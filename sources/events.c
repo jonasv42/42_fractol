@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:51:00 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/14 23:31:41 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/15 19:05:45 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void	ft_zoom(double sign, t_specs *specs)
 void	ft_scroll(double xdelta, double ydelta, void *param)
 {
 	t_specs	*specs;
-	int32_t	width;
-	int32_t	height;
+	//int32_t	width;
+	//int32_t	height;
 
 	specs = param;
 	if (ydelta < 0) // zoom in

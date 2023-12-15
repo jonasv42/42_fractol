@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 18:31:10 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/14 21:29:03 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/15 19:16:32 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int	calculate_infinity(t_complex c_plane, t_specs **specs)
 	calc.i = 1;
 	while (calc.i < (*specs)->max_iterations) // z = z * z + c
 	{
+		calc.magnitude = hypot(c_plane.r, c_plane.i);
+		if (calc.magnitude > 2)
+			return (calc.i);
 		calc.rz_product = (c_plane.r * c_plane.r) - (c_plane.i * c_plane.i);
 		calc.iz_product = (c_plane.r * c_plane.i) + (c_plane.i * c_plane.r);
 		c_plane.r = calc.rz_product + (*specs)->julia_rc;
 		c_plane.i = calc.iz_product + (*specs)->julia_ic;
-		calc.magnitude = hypot(c_plane.r, c_plane.i);
-		if (calc.magnitude > 2)
-			return (calc.i);
 		calc.i++;
 	}
 	return (0);
@@ -49,13 +49,13 @@ int	calc_infinity_mandelbrot(t_complex c_plane, t_specs **specs)
 	calc.iz = 0.0;
 	while (calc.i < (*specs)->max_iterations) // z = z * z + c
 	{
+		calc.magnitude = hypot(calc.rz, calc.iz);
+		if (calc.magnitude > 4)
+			return (calc.i);
 		calc.rz_product = (calc.rz * calc.rz) - (calc.iz * calc.iz);
 		calc.iz_product = (calc.rz * calc.iz) + (calc.iz * calc.rz);
 		calc.rz = calc.rz_product + c_plane.r;
 		calc.iz = calc.iz_product + c_plane.i;
-		calc.magnitude = hypot(calc.rz, calc.iz);
-		if (calc.magnitude > 1.5)
-			return (calc.i);
 		calc.i++;
 	}
 	return (0);

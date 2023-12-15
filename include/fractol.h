@@ -6,7 +6,7 @@
 /*   By: jvets <jvets@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 21:02:22 by jvets             #+#    #+#             */
-/*   Updated: 2023/12/14 22:58:05 by jvets            ###   ########.fr       */
+/*   Updated: 2023/12/15 19:14:48 by jvets            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@ typedef struct s_specifications
 	double		x800;
 	double		y0;
 	double		y800;
+	uint32_t	red;
+	uint32_t	green;
+	uint32_t	blue;
+	uint32_t	hex_value;
 }	t_specs;
 
 typedef struct s_calc
@@ -75,6 +79,7 @@ void	ft_zoom(double zoomfactor, t_specs *specs);
 void	ft_shift_img(int x, int y, int sign, t_specs *specs);
 void	ft_scroll(double xdelta, double ydelta, void *param);
 void	ft_init(char *argv[], t_specs *specs);
+int	ft_isnum(const char *str);
 
 #endif
 
